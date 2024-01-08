@@ -1,7 +1,7 @@
 import { Paper, TableBody,Table, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material'
 import React from 'react'
 
-export default function UsersTable({rows}) {
+export default function UsersTable({rows,selectedUser}) {
   return (
     <div>
         <TableContainer component={Paper}>
@@ -19,7 +19,7 @@ export default function UsersTable({rows}) {
                             <TableCell component='th' scope='row'>{row.id}</TableCell>
                             <TableCell component='th' scope='row'>{row.name}</TableCell>
                             <TableCell  >
-                                <Button onClick={()=>{}}>
+                                <Button onClick={()=>selectedUser({id:row.id,name:row.name })}>
                                    Update
                                 </Button>
                                 <Button onClick={()=>{}}>

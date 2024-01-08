@@ -1,10 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Button, Grid, Input, Typography} from "@mui/material";
 
-export default function UserForm() {
+export default function UserForm({addUser,updateUser,submited,data,isEdit}) {
 
-  const [id,setId] = useState(0)
+  const [id,setId] = useState()
   const [name,setName] =useState('')
+
+  useEffect(()=>{
+    if (!submited){
+      setId('');
+      setName('');
+    }
+  },[submited])
+
+  useEffect(()=>{
+    if(data?.id && data.id !== 0){
+      setId(data.id);
+      setName(data.name)
+    }
+  })
 
   return (
     <Grid container spacing={2} 
@@ -42,7 +56,13 @@ export default function UserForm() {
       />
     </Grid>
     
-    <Button sx={{margin:"auto", marginBottom:"20px",backgroundColor:"#00c6e6",marginLeft:"15px",'&:hover':{opacity : "0.7",backgroundColor:"#00c6e6"}}} variant=''>Add</Button>
+    <Button sx={{margin:"auto", marginBottom:"20px",backgroundColor:"#00c6e6",marginLeft:"15px",'&:hover':{opacity : "0.7",backgroundColor:"#00c6e6"}}} variant=''
+    onClick={()=> isEdit ? updateUser({id,name}) : addUser({id,name})}
+    >{
+      isEdit ? 'update' : 'Add'
+    }
+    
+    </Button>
 
     </Grid>
   )

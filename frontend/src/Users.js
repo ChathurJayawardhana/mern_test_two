@@ -8,6 +8,9 @@ import axios from 'axios'
 export default function Users() {
 
   const [users,setUsers] = useState([]);
+  const [submited,setSubmited] = useState(false);
+  const [selectedUser,setSelectedUser] = useState({});
+  const [isEdit,setIsEdit] = useState(false);
   
    useEffect(()=>{
       getUsers();
@@ -22,6 +25,41 @@ export default function Users() {
       console.error(error);
     })
   }
+   
+  const addUser = (data) => {
+    setSubmited(true);
+    const payload = {
+      id:data.id,
+      name : data.name,
+    }
+    axios.post('http://localhost:3001/api/createuser',payload)
+    .then(() => {
+      getUsers();
+      setSubmited(false);
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
+
+  const updateUser = (data) => {
+    setSubmited(true);
+    
+    const payload = {
+      id:data.id,
+      name:data.name,
+    }
+    axios.post('http://localhost:3001/api/updateuser',payload)
+    .then(() => {
+      getUsers();
+      setSubmited(false);
+      isEdit(false);
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
+ 
 
   return (
     <Box
@@ -30,8 +68,15 @@ export default function Users() {
       margin:'auto'
     }}
     >
-      <UserForm/>
-      <UsersTable rows={users}/>
+      <UserForm addUser={addUser} updateUser={updateUser} submited={submited} data={selectedUser} isEdit={isEdit}/>
+      <UsersTable 
+      rows={users}
+      selectedUser={data => {
+        setSelectedUser(data);
+        setIsEdit(true);
+      }}
+
+      />
     </Box>
   )
 }
